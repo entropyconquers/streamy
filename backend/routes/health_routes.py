@@ -1,6 +1,7 @@
 from flask import Blueprint, jsonify
 from services.tmdb_client import TMDBClient
 from config import Config
+from api_schema import get_api_schema
 
 # Create blueprint
 health_bp = Blueprint('health', __name__)
@@ -38,7 +39,8 @@ def api_documentation():
             },
             'utility': {
                 'GET /': 'API documentation',
-                'GET /health': 'Health check'
+                'GET /health': 'Health check',
+                'GET /schema': 'OpenAPI 3.0 schema specification'
             }
         },
         'new_features': {
@@ -175,4 +177,9 @@ def health_check():
         return jsonify({
             'status': 'error',
             'message': str(e)
-        }), 500 
+        }), 500
+
+@health_bp.route('/schema', methods=['GET'])
+def api_schema():
+    """Return OpenAPI 3.0 schema for the API"""
+    return jsonify(get_api_schema()) 

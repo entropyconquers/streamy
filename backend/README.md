@@ -7,6 +7,44 @@ A modern, modular torrent search API that integrates **The Movie Database (TMDB)
 **Search Endpoints**: Return top 5 TMDB results only (fast, lightweight)
 **Detail Endpoints**: Return streamlined TMDB details + torrent links (optimized for streaming apps)
 
+## 📋 OpenAPI Schema & Documentation
+
+### Schema Access
+
+The API now includes comprehensive OpenAPI 3.0.3 schema documentation:
+
+```bash
+# Get complete OpenAPI schema
+curl http://localhost:8001/schema
+
+# Get API documentation
+curl http://localhost:8001/
+
+# Check API health
+curl http://localhost:8001/health
+```
+
+### Integration Tools
+
+- **Swagger UI**: Import schema from `/schema` endpoint for interactive documentation
+- **Postman**: Import OpenAPI spec for automatic collection generation
+- **Code Generation**: Use OpenAPI generators for client SDKs in any language
+- **API Testing**: Use schema for automated testing and validation
+
+### Documentation Files
+
+- **OpenAPI Schema**: Available at `/schema` endpoint (JSON format)
+- **Markdown Documentation**: `backend/API_SCHEMA.md` (comprehensive guide)
+- **Test Suite**: `backend/test_schema.py` (schema validation)
+
+### Schema Features
+
+- ✅ **Complete Coverage**: All 10 endpoints documented with examples
+- ✅ **Detailed Schemas**: 20+ data models with validation rules
+- ✅ **Error Handling**: Proper HTTP status codes and error responses
+- ✅ **Type Safety**: Strict type definitions for all fields
+- ✅ **Real Examples**: Actual response examples for all endpoints
+
 ## ✨ Features
 
 - **Streamlined TMDB Integration**: Essential fields only, optimized for streaming app UIs
