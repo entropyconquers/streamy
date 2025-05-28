@@ -1,0 +1,229 @@
+{
+  "movie_search_example": {
+    "status": "success",
+    "query": "avengers",
+    "quality_filter": "hd",
+    "results": [
+      {
+        "title": "Avengers Endgame",
+        "year": "2019",
+        "torrents": [
+          {
+            "id": "abc12345",
+            "original_title": "Avengers.Endgame.2019.1080p.BluRay.x264-SPARKS",
+            "size": "15.2 GB",
+            "magnet_link": "magnet:?xt=urn:btih:...",
+            "quality": "1080p",
+            "codec": "x264",
+            "seeds": 1250,
+            "leechers": 89
+          },
+          {
+            "id": "def67890",
+            "original_title": "Avengers.Endgame.2019.2160p.UHD.BluRay.x265-TERMINAL",
+            "size": "45.8 GB",
+            "magnet_link": "magnet:?xt=urn:btih:...",
+            "quality": "4K",
+            "codec": "x265",
+            "seeds": 892,
+            "leechers": 156
+          }
+        ],
+        "magnet_links": ["magnet:?xt=urn:btih:...", "magnet:?xt=urn:btih:..."],
+        "total_torrents": 2,
+        "best_quality": "4K",
+        "available_qualities": ["4K", "1080p"],
+        "total_seeds": 2142,
+        "total_leechers": 245,
+        "metadata": {
+          "tmdb_id": 299534,
+          "title": "Avengers: Endgame",
+          "original_title": "Avengers: Endgame",
+          "overview": "After the devastating events of Avengers: Infinity War, the universe is in ruins due to the efforts of the Mad Titan, Thanos. With the help of remaining allies, the Avengers must assemble once more in order to undo Thanos' actions and restore order to the universe once and for all, no matter what consequences may be in store.",
+          "release_date": "2019-04-24",
+          "runtime": 181,
+          "genres": ["Adventure", "Science Fiction", "Action"],
+          "vote_average": 8.3,
+          "vote_count": 20845,
+          "poster_path": "https://image.tmdb.org/t/p/w500/or06FN3Dka5tukK1e9sl16pB3iy.jpg",
+          "backdrop_path": "https://image.tmdb.org/t/p/w500/7RyHsO4yDXtBv1zUU3mTpHeQ0d5.jpg",
+          "cast": [
+            {
+              "name": "Robert Downey Jr.",
+              "character": "Tony Stark / Iron Man",
+              "profile_path": "https://image.tmdb.org/t/p/w500/5qHNjhtjMD4YWH3UP0rm4tKwxCL.jpg"
+            },
+            {
+              "name": "Chris Evans",
+              "character": "Steve Rogers / Captain America",
+              "profile_path": "https://image.tmdb.org/t/p/w500/3bOGNsHlrswhyW79uvIHH1V43JI.jpg"
+            },
+            {
+              "name": "Mark Ruffalo",
+              "character": "Bruce Banner / Hulk",
+              "profile_path": "https://image.tmdb.org/t/p/w500/z3dvKqMNDQWk3QLxzumloQVR0pv.jpg"
+            }
+          ],
+          "director": "Anthony Russo",
+          "imdb_id": "tt4154796",
+          "budget": 356000000,
+          "revenue": 2797800564,
+          "production_companies": ["Marvel Studios", "Walt Disney Pictures"],
+          "trailer": "https://www.youtube.com/watch?v=TcMBFSGVi1c"
+        }
+      }
+    ],
+    "count": 1,
+    "total_torrents": 2,
+    "tmdb_enabled": true
+  },
+
+  "tv_show_search_example": {
+    "status": "success",
+    "query": "breaking bad",
+    "quality_filter": "hd",
+    "season_filter": null,
+    "results": [
+      {
+        "title": "Breaking Bad",
+        "torrents": [
+          {
+            "id": "xyz98765",
+            "original_title": "Breaking.Bad.S01E01.1080p.BluRay.x264-REWARD",
+            "size": "4.2 GB",
+            "magnet_link": "magnet:?xt=urn:btih:...",
+            "quality": "1080p",
+            "codec": "x264",
+            "season": 1,
+            "episode": 1,
+            "seeds": 2156,
+            "leechers": 45
+          },
+          {
+            "id": "uvw54321",
+            "original_title": "Breaking.Bad.S01.Complete.1080p.BluRay.x264-ROVERS",
+            "size": "28.5 GB",
+            "magnet_link": "magnet:?xt=urn:btih:...",
+            "quality": "1080p",
+            "codec": "x264",
+            "season": 1,
+            "episode": null,
+            "seeds": 1834,
+            "leechers": 123
+          }
+        ],
+        "magnet_links": ["magnet:?xt=urn:btih:...", "magnet:?xt=urn:btih:..."],
+        "total_torrents": 2,
+        "best_quality": "1080p",
+        "available_qualities": ["1080p"],
+        "total_seeds": 3990,
+        "total_leechers": 168,
+        "seasons": [1],
+        "episodes": [1],
+        "total_seasons": 1,
+        "total_episodes": 1,
+        "metadata": {
+          "tmdb_id": 1396,
+          "name": "Breaking Bad",
+          "original_name": "Breaking Bad",
+          "overview": "When Walter White, a New Mexico chemistry teacher, is diagnosed with Stage III cancer and given a prognosis of only two years left to live. He becomes filled with a sense of fearlessness and an unrelenting desire to secure his family's financial future at any cost as he enters the dangerous world of drugs and crime.",
+          "first_air_date": "2008-01-20",
+          "last_air_date": "2013-09-29",
+          "number_of_seasons": 5,
+          "number_of_episodes": 62,
+          "episode_run_time": [45, 47],
+          "genres": ["Drama", "Crime"],
+          "vote_average": 9.0,
+          "vote_count": 8945,
+          "poster_path": "https://image.tmdb.org/t/p/w500/ggFHVNu6YYI5L9pCfOacjizRGt.jpg",
+          "backdrop_path": "https://image.tmdb.org/t/p/w500/tsRy63Mu5cu8etL1X7ZLyf7UP1M.jpg",
+          "cast": [
+            {
+              "name": "Bryan Cranston",
+              "character": "Walter White",
+              "profile_path": "https://image.tmdb.org/t/p/w500/7Jahy5LZX2Fo8fGJltMreAI49hC.jpg"
+            },
+            {
+              "name": "Aaron Paul",
+              "character": "Jesse Pinkman",
+              "profile_path": "https://image.tmdb.org/t/p/w500/lOhc9ePVvdgP7QWrUpn5Iqz8Lbq.jpg"
+            },
+            {
+              "name": "Anna Gunn",
+              "character": "Skyler White",
+              "profile_path": "https://image.tmdb.org/t/p/w500/6yLKtfYFWbJp5HALvKkGhSLwPkA.jpg"
+            }
+          ],
+          "created_by": ["Vince Gilligan"],
+          "networks": ["AMC"],
+          "production_companies": [
+            "High Bridge Productions",
+            "Gran Via Productions"
+          ],
+          "status": "Ended",
+          "type": "Scripted",
+          "trailer": "https://www.youtube.com/watch?v=HhesaQXLuRY"
+        }
+      }
+    ],
+    "count": 1,
+    "total_torrents": 2,
+    "tmdb_enabled": true
+  },
+
+  "metadata_explanation": {
+    "description": "Rich metadata provided by TMDB integration",
+    "movie_metadata_fields": {
+      "tmdb_id": "Unique TMDB identifier",
+      "title": "Official movie title",
+      "original_title": "Original title in original language",
+      "overview": "Plot summary",
+      "release_date": "Release date (YYYY-MM-DD)",
+      "runtime": "Runtime in minutes",
+      "genres": "Array of genre names",
+      "vote_average": "TMDB rating (0-10)",
+      "vote_count": "Number of votes",
+      "poster_path": "High-quality poster image URL",
+      "backdrop_path": "High-quality backdrop image URL",
+      "cast": "Array of main cast members with photos",
+      "director": "Director name",
+      "imdb_id": "IMDb identifier",
+      "budget": "Production budget in USD",
+      "revenue": "Box office revenue in USD",
+      "production_companies": "Array of production company names",
+      "trailer": "YouTube trailer URL"
+    },
+    "tv_show_metadata_fields": {
+      "tmdb_id": "Unique TMDB identifier",
+      "name": "Official show name",
+      "original_name": "Original name in original language",
+      "overview": "Show summary",
+      "first_air_date": "First episode air date",
+      "last_air_date": "Last episode air date",
+      "number_of_seasons": "Total number of seasons",
+      "number_of_episodes": "Total number of episodes",
+      "episode_run_time": "Array of typical episode lengths",
+      "genres": "Array of genre names",
+      "vote_average": "TMDB rating (0-10)",
+      "vote_count": "Number of votes",
+      "poster_path": "High-quality poster image URL",
+      "backdrop_path": "High-quality backdrop image URL",
+      "cast": "Array of main cast members with photos",
+      "created_by": "Array of creator names",
+      "networks": "Array of network names",
+      "production_companies": "Array of production company names",
+      "status": "Show status (Ended, Returning, etc.)",
+      "type": "Show type (Scripted, Reality, etc.)",
+      "trailer": "YouTube trailer URL"
+    },
+    "ui_benefits": [
+      "Beautiful movie/show posters for grid layouts",
+      "Rich detail pages with cast photos and info",
+      "Plot summaries for content discovery",
+      "Ratings and reviews integration",
+      "Trailer embedding capabilities",
+      "Genre-based filtering and recommendations",
+      "Professional production information"
+    ]
+  }
+}
