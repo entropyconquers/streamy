@@ -9,6 +9,7 @@ from flask import Flask
 from config import Config
 from routes.search_routes import search_bp
 from routes.health_routes import health_bp
+from services.tmdb_client import TMDBClient
 
 # Configure logging
 logging.basicConfig(
@@ -32,12 +33,25 @@ def main():
     
     print("🚀 Starting Torrent Search API v4.0...")
     print("📁 Modular architecture enabled")
-    print("🎭 TMDB metadata:", "✅ Enabled" if Config.is_tmdb_enabled() else "❌ Disabled")
+    
+    # Test TMDB configuration
+    tmdb_client = TMDBClient()
+    if tmdb_client.enabled:
+        print("🎭 TMDB metadata: ✅ Enabled")
+        if tmdb_client.test_connection():
+            print("🔗 TMDB connection: ✅ Connected")
+        else:
+            print("🔗 TMDB connection: ❌ Failed (check your API key)")
+    else:
+        print("🎭 TMDB metadata: ❌ Disabled (API key not configured)")
+        print("💡 To enable TMDB: Run 'python setup_tmdb.py' or set TMDB_API_KEY in .env file")
+    
     print(f"🔍 Torrent site: {Config.TORRENT_SITE_DOMAIN}")
     print(f"🌐 Server: http://{Config.HOST}:{Config.API_PORT}")
-    
-    if not Config.is_tmdb_enabled():
-        print("💡 To enable TMDB: Set TMDB_API_KEY in .env file")
+    print()
+    print("📖 API Documentation: http://localhost:8001/")
+    print("🏥 Health Check: http://localhost:8001/health")
+    print()
     
     app.run(
         debug=Config.DEBUG,

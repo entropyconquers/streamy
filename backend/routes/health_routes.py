@@ -149,11 +149,12 @@ def api_documentation():
 def health_check():
     """Health check endpoint"""
     try:
-        # Test TMDB connection if available
-        tmdb_status = 'disabled'
-        if Config.is_tmdb_enabled():
-            tmdb_client = TMDBClient()
+        # Test TMDB connection
+        tmdb_client = TMDBClient()
+        if tmdb_client.enabled:
             tmdb_status = 'connected' if tmdb_client.test_connection() else 'error'
+        else:
+            tmdb_status = 'disabled - API key not configured'
         
         return jsonify({
             'status': 'healthy',
@@ -170,6 +171,10 @@ def health_check():
                 'streamlined_responses': 'active',
                 'duplicate_removal': 'active'
             },
+            'configuration': {
+                'tmdb_enabled': tmdb_client.enabled,
+                'hint': 'Set TMDB_API_KEY in .env file to enable TMDB features' if not tmdb_client.enabled else None
+            },
             'timestamp': 'live'
         })
         
@@ -177,7 +182,7 @@ def health_check():
         return jsonify({
             'status': 'error',
             'message': str(e)
-        }), 500 
+        }), 500
 
 @health_bp.route('/schema', methods=['GET'])
 def api_schema():

@@ -14,16 +14,17 @@ search_bp = Blueprint('search', __name__)
 
 # Initialize services
 torrent_finder = TorrentFinder()
-tmdb_client = TMDBClient() if Config.is_tmdb_enabled() else None
+tmdb_client = TMDBClient()
 
 @search_bp.route('/search/<query>', methods=['GET'])
 def search_multi(query):
     """General search returning top 5 TMDB results (movies and TV shows)"""
     try:
-        if not tmdb_client:
+        if not tmdb_client.enabled:
             return jsonify({
                 'status': 'error',
-                'message': 'TMDB service not available'
+                'message': 'TMDB service not available - API key not configured',
+                'hint': 'Set TMDB_API_KEY in your .env file to enable TMDB features'
             }), 503
         
         # Get TMDB multi search results (top 5)
@@ -48,10 +49,11 @@ def search_multi(query):
 def search_movies(query):
     """Search movies returning top 5 TMDB results"""
     try:
-        if not tmdb_client:
+        if not tmdb_client.enabled:
             return jsonify({
                 'status': 'error',
-                'message': 'TMDB service not available'
+                'message': 'TMDB service not available - API key not configured',
+                'hint': 'Set TMDB_API_KEY in your .env file to enable TMDB features'
             }), 503
         
         # Get TMDB movie search results (top 5)
@@ -76,10 +78,11 @@ def search_movies(query):
 def search_tv_shows(query):
     """Search TV shows returning top 5 TMDB results"""
     try:
-        if not tmdb_client:
+        if not tmdb_client.enabled:
             return jsonify({
                 'status': 'error',
-                'message': 'TMDB service not available'
+                'message': 'TMDB service not available - API key not configured',
+                'hint': 'Set TMDB_API_KEY in your .env file to enable TMDB features'
             }), 503
         
         # Get TMDB TV search results (top 5)
@@ -104,10 +107,11 @@ def search_tv_shows(query):
 def get_details_with_torrents(content_type, tmdb_id):
     """Get detailed TMDB info with available torrent links"""
     try:
-        if not tmdb_client:
+        if not tmdb_client.enabled:
             return jsonify({
                 'status': 'error',
-                'message': 'TMDB service not available'
+                'message': 'TMDB service not available - API key not configured',
+                'hint': 'Set TMDB_API_KEY in your .env file to enable TMDB features'
             }), 503
         
         if content_type not in ['movie', 'tv']:
@@ -164,10 +168,11 @@ def get_details_with_torrents(content_type, tmdb_id):
 def get_season_details_with_torrents(tv_id, season_number):
     """Get TV season details with available torrent links"""
     try:
-        if not tmdb_client:
+        if not tmdb_client.enabled:
             return jsonify({
                 'status': 'error',
-                'message': 'TMDB service not available'
+                'message': 'TMDB service not available - API key not configured',
+                'hint': 'Set TMDB_API_KEY in your .env file to enable TMDB features'
             }), 503
         
         # Get TV show details first to get the show name
@@ -219,10 +224,11 @@ def get_season_details_with_torrents(tv_id, season_number):
 def get_episode_details_with_torrents(tv_id, season_number, episode_number):
     """Get TV episode details with available torrent links"""
     try:
-        if not tmdb_client:
+        if not tmdb_client.enabled:
             return jsonify({
                 'status': 'error',
-                'message': 'TMDB service not available'
+                'message': 'TMDB service not available - API key not configured',
+                'hint': 'Set TMDB_API_KEY in your .env file to enable TMDB features'
             }), 503
         
         # Get TV show details first to get the show name

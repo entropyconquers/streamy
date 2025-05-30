@@ -152,7 +152,6 @@ const styles = StyleSheet.create({
   container: {
     zIndex: 100,
     height: 90,
-    paddingTop: Platform.OS === "ios" ? 40 : 20,
   },
   gradient: {
     flex: 1,

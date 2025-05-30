@@ -238,11 +238,17 @@ export default function HomeScreen() {
     });
 
     return (
-      <>
-        <TopNavigation
-          onSearchPress={handleSearchPress}
-          onProfilePress={handleProfilePress}
-        />
+      <View
+        style={{
+          position: "relative",
+        }}
+      >
+        <View style={{ position: "absolute", top: 0, left: 0, right: 0 }}>
+          <TopNavigation
+            onSearchPress={handleSearchPress}
+            onProfilePress={handleProfilePress}
+          />
+        </View>
         {/* Animated Hero Banner with Carousel */}
         {featuredContent.length > 0 && (
           <View style={styles.heroContainer}>
@@ -274,7 +280,7 @@ export default function HomeScreen() {
           </View>
         )}
         <View style={styles.sectionsSpacing} />
-      </>
+      </View>
     );
   };
 
