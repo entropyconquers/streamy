@@ -177,7 +177,7 @@ def health_check():
         return jsonify({
             'status': 'error',
             'message': str(e)
-        }), 500
+        }), 500 
 
 @health_bp.route('/schema', methods=['GET'])
 def api_schema():
