@@ -6,6 +6,7 @@ import {
   Pressable,
   Dimensions,
   Platform,
+  TVFocusGuideView,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
@@ -22,7 +23,7 @@ export const TopNavigation: React.FC<TopNavigationProps> = ({
   onProfilePress,
 }) => {
   return (
-    <View style={styles.container}>
+    <TVFocusGuideView style={styles.container} autoFocus>
       <LinearGradient
         colors={[
           "rgba(0,0,0,0.95)",
@@ -144,7 +145,7 @@ export const TopNavigation: React.FC<TopNavigationProps> = ({
           </View>
         </View>
       </LinearGradient>
-    </View>
+    </TVFocusGuideView>
   );
 };
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import {
   View,
   FlatList,
@@ -9,6 +9,7 @@ import {
   Alert,
   Dimensions,
   Animated as RNAnimated,
+  useTVEventHandler,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import Animated, {
@@ -40,8 +41,9 @@ export default function HomeScreen() {
   const [currentHeroIndex, setCurrentHeroIndex] = useState(0);
   const [sections, setSections] = useState<SectionData[]>([]);
   const [loading, setLoading] = useState(true);
+  const [activeSectionKey, setActiveSectionKey] = useState<string | null>(null);
 
-  const flatListRef = useRef<FlatList>(null);
+  const flatListRef = useRef<FlatList<SectionData>>(null);
   const scrollY = useRef(new RNAnimated.Value(0)).current;
 
   // Hero carousel animation values
@@ -215,6 +217,20 @@ export default function HomeScreen() {
     console.log("Profile pressed");
   };
 
+  const handleSectionFocus = (sectionKey: string) => {
+    if (flatListRef.current && sections) {
+      const sectionIndex = sections.findIndex((s) => s.key === sectionKey);
+      if (sectionIndex !== -1) {
+        setActiveSectionKey(sectionKey);
+        flatListRef.current.scrollToIndex({
+          animated: true,
+          index: sectionIndex,
+          viewPosition: 0.5, // Scroll to the center
+        });
+      }
+    }
+  };
+
   const renderSection = ({ item }: { item: SectionData }) => (
     <HorizontalSection
       title={item.title}
@@ -222,10 +238,28 @@ export default function HomeScreen() {
       onItemPress={handleItemPress}
       onSeeAll={() => handleSeeAll(item.key)}
       sectionKey={item.key}
+      onSectionFocus={handleSectionFocus}
+      isActive={item.key === activeSectionKey}
     />
   );
 
-  const ListHeaderComponent = () => {
+  // const [isDownPressed, setIsDownPressed] = useState(false);
+  // // on down press
+  // const handleDownPress = () => {
+  //   setIsDownPressed(true);
+  // };
+
+  // const myTVEventHandler = (evt: any) => {
+  //   if (evt.eventType === "down") {
+  //     handleDownPress();
+  //   }
+  // };
+
+  // useTVEventHandler(myTVEventHandler);
+
+  // console.log("isDownPressed", isDownPressed);
+
+  const ListHeaderComponent = React.memo(() => {
     const heroAnimatedStyle = useAnimatedStyle(() => {
       return {
         opacity: heroOpacity.value,
@@ -282,9 +316,16 @@ export default function HomeScreen() {
         <View style={styles.sectionsSpacing} />
       </View>
     );
-  };
+  });
 
   const ListFooterComponent = () => <View style={styles.bottomSpacing} />;
+  const ListHeader = useMemo(() => {
+    return (
+      <View hasTVPreferredFocus={true} style={{ position: "relative" }}>
+        <ListHeaderComponent />
+      </View>
+    );
+  }, [featuredContent, currentHeroIndex, heroOpacity, heroTranslateX]);
 
   if (loading) {
     return (
@@ -335,7 +376,7 @@ export default function HomeScreen() {
         bounces={false}
         keyboardShouldPersistTaps="handled"
         removeClippedSubviews={false}
-        ListHeaderComponent={ListHeaderComponent}
+        ListHeaderComponent={ListHeader}
         ListFooterComponent={ListFooterComponent}
         contentContainerStyle={styles.flatListContent}
         onScroll={RNAnimated.event(

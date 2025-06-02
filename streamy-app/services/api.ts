@@ -3,7 +3,7 @@
  * Connects to the backend API for movie and TV show data
  */
 
-const API_BASE_URL = "http://172.16.0.102:8001";
+const API_BASE_URL = "http://192.168.0.118:8001";
 
 export interface SearchResult {
   id: number;

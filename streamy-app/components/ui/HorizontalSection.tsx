@@ -1,4 +1,4 @@
-import React, { useRef, forwardRef } from "react";
+import React, { useRef, forwardRef, useState } from "react";
 import {
   View,
   Text,
@@ -7,11 +7,17 @@ import {
   Pressable,
   Dimensions,
   TVFocusGuideView,
-  Animated,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { BlurView } from "expo-blur";
 import { Ionicons } from "@expo/vector-icons";
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+  withDelay,
+  Easing,
+} from "react-native-reanimated";
 import { SearchResult } from "../../services/api";
 import Card from "./Card";
 
@@ -26,6 +32,8 @@ interface HorizontalSectionProps {
   cardHeight?: number;
   showSeeAll?: boolean;
   sectionKey: string;
+  onSectionFocus?: (sectionKey: string) => void;
+  isActive?: boolean;
 }
 
 export const HorizontalSection = forwardRef<View, HorizontalSectionProps>(
@@ -39,25 +47,152 @@ export const HorizontalSection = forwardRef<View, HorizontalSectionProps>(
       cardHeight = 180,
       showSeeAll = true,
       sectionKey,
+      isActive,
     } = props;
 
     const flatListRef = useRef<FlatList>(null);
+    const titleScale = useSharedValue(1);
+
+    // Create data array with "See all" button as last item if needed
+    const listData = React.useMemo(() => {
+      const items = [...data];
+      if (showSeeAll && data.length > 0) {
+        items.push({ id: "see-all", type: "see-all" } as any);
+      }
+      return items;
+    }, [data, showSeeAll]);
+
+    // Animate title scale based on isActive prop
+    React.useEffect(() => {
+      titleScale.value = withDelay(
+        50,
+        withTiming(isActive ? 1.2 : 0.7, {
+          duration: 300,
+          easing: Easing.bezier(0.25, 0.1, 0.25, 1.0),
+        })
+      );
+    }, [isActive, titleScale]);
+
+    // Animated style for the title
+    const animatedTitleStyle = useAnimatedStyle(() => {
+      return {
+        transform: [{ scale: titleScale.value }],
+        transformOrigin: "left",
+      };
+    });
+
+    const handleCardFocus = (index: number) => {
+      if (flatListRef.current) {
+        const itemWidthWithGap = cardWidth + 12; // 12 is the gap from listContainer styles
+        const offset = index * itemWidthWithGap;
+        flatListRef.current.scrollToOffset({ offset, animated: true });
+      }
+    };
 
     const renderItem = ({
       item,
       index,
     }: {
-      item: SearchResult;
+      item: SearchResult | { id: string; type: string };
       index: number;
-    }) => (
-      <Card
-        item={item}
-        onPress={() => onItemPress?.(item)}
-        //onFocus={() => handleCardFocus(index)}
-        width={cardWidth}
-        height={cardHeight}
-      />
-    );
+    }) => {
+      // Render "See all" button as last item
+      if ("type" in item && item.type === "see-all") {
+        return (
+          <TVFocusGuideView
+            autoFocus
+            onFocus={handleSeeAllFocus}
+            onBlur={handleSeeAllBlur}
+          >
+            <Pressable
+              onPress={onSeeAll}
+              style={[styles.seeAllCard, seeAllFocused && styles.seeAllFocused]}
+              tvParallaxProperties={{
+                enabled: true,
+                magnification: 1.1,
+                pressMagnification: 1.05,
+              }}
+            >
+              <BlurView style={styles.seeAllCardBlur}>
+                <LinearGradient
+                  colors={
+                    seeAllFocused
+                      ? ["#FFFFFF", "#F8F9FA"]
+                      : [
+                          "rgba(255,255,255,0.15)",
+                          "rgba(255,255,255,0.05)",
+                          "rgba(0,0,0,0.1)",
+                        ]
+                  }
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 1 }}
+                  style={styles.seeAllCardGradient}
+                >
+                  <View style={styles.seeAllIconContainer}>
+                    <LinearGradient
+                      colors={
+                        seeAllFocused
+                          ? ["#000000", "#333333"]
+                          : ["rgba(255,255,255,0.2)", "rgba(255,255,255,0.1)"]
+                      }
+                      style={styles.seeAllIconGradient}
+                    >
+                      <Ionicons
+                        name="chevron-forward"
+                        size={24}
+                        color={
+                          seeAllFocused ? "#FFFFFF" : "rgba(255,255,255,0.9)"
+                        }
+                      />
+                    </LinearGradient>
+                  </View>
+                  <Text
+                    style={[
+                      styles.seeAllCardText,
+                      seeAllFocused && styles.seeAllTextFocused,
+                    ]}
+                  >
+                    See all
+                  </Text>
+                  <Text
+                    style={[
+                      styles.seeAllSubtext,
+                      seeAllFocused && styles.seeAllSubtextFocused,
+                    ]}
+                  >
+                    View more content
+                  </Text>
+                </LinearGradient>
+              </BlurView>
+            </Pressable>
+          </TVFocusGuideView>
+        );
+      }
+
+      // Render regular card
+      return (
+        <Card
+          item={item as SearchResult}
+          onPress={() => onItemPress?.(item as SearchResult)}
+          onFocus={() => {
+            props.onSectionFocus?.(sectionKey);
+            handleCardFocus(index);
+          }}
+          width={cardWidth}
+          height={cardHeight}
+        />
+      );
+    };
+
+    const [seeAllFocused, setSeeAllFocused] = useState(false);
+
+    const handleSeeAllBlur = () => {
+      setSeeAllFocused(false);
+    };
+
+    const handleSeeAllFocus = () => {
+      setSeeAllFocused(true);
+    };
 
     return (
       <View ref={ref} style={styles.container}>
@@ -69,27 +204,9 @@ export const HorizontalSection = forwardRef<View, HorizontalSectionProps>(
             end={{ x: 1, y: 0 }}
             style={styles.headerGradient}
           >
-            <Text style={styles.title}>{title}</Text>
-            {showSeeAll && data.length > 0 && (
-              <Pressable
-                onPress={onSeeAll}
-                style={styles.seeAllButton}
-                tvParallaxProperties={{
-                  enabled: true,
-                  magnification: 1.1,
-                  pressMagnification: 1.05,
-                }}
-              >
-                <BlurView style={styles.seeAllBlur}>
-                  <Text style={styles.seeAllText}>See all</Text>
-                  <Ionicons
-                    name="chevron-forward"
-                    size={16}
-                    color="rgba(255,255,255,0.9)"
-                  />
-                </BlurView>
-              </Pressable>
-            )}
+            <Animated.Text style={[styles.title, animatedTitleStyle]}>
+              {title}
+            </Animated.Text>
           </LinearGradient>
         </View>
 
@@ -98,9 +215,15 @@ export const HorizontalSection = forwardRef<View, HorizontalSectionProps>(
           <TVFocusGuideView autoFocus>
             <FlatList
               ref={flatListRef}
-              data={data}
+              data={listData}
               renderItem={renderItem}
-              keyExtractor={(item) => `${item.media_type}-${item.id}`}
+              keyExtractor={(item) =>
+                "type" in item && item.type === "see-all"
+                  ? "see-all"
+                  : `${(item as SearchResult).media_type}-${
+                      (item as SearchResult).id
+                    }`
+              }
               horizontal
               showsHorizontalScrollIndicator={false}
               contentContainerStyle={styles.listContainer}
@@ -153,7 +276,7 @@ const styles = StyleSheet.create({
     position: "relative",
   },
   header: {
-    marginBottom: 16,
+    marginBottom: 8,
     position: "relative",
   },
   headerGradient: {
@@ -168,30 +291,80 @@ const styles = StyleSheet.create({
     fontSize: 26,
     fontFamily: "Urbanist_700Bold",
     letterSpacing: -0.7,
-    textShadowColor: "rgba(0, 0, 0, 0.7)",
-    textShadowOffset: { width: 0, height: 1 },
-    textShadowRadius: 3,
+    marginLeft: -10,
   },
-  seeAllButton: {
-    borderRadius: 20,
+  seeAllCard: {
+    width: 320,
+    height: 180,
+    borderRadius: 16,
     overflow: "hidden",
-  },
-  seeAllBlur: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    gap: 4,
-    borderRadius: 20,
+    marginHorizontal: 6,
+    marginVertical: 8,
     borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.15)",
-    backgroundColor: "rgba(255,255,255,0.05)",
+    borderColor: "rgba(255,255,255,0.12)",
+    backgroundColor: "rgba(0,0,0,0.4)",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 8,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 12,
+    elevation: 8,
   },
-  seeAllText: {
-    color: "rgba(255,255,255,0.9)",
+  seeAllFocused: {
+    backgroundColor: "rgba(255,255,255,0.65)",
+    borderColor: "rgba(255,255,255,0.8)",
+    transform: [{ scale: 1.05 }],
+    shadowColor: "#FFFFFF",
+    shadowOpacity: 0.4,
+    shadowRadius: 20,
+    elevation: 15,
+  },
+  seeAllTextFocused: {
+    color: "rgba(0,0,0,1)",
+  },
+  seeAllCardBlur: {
+    flex: 1,
+    borderRadius: 16,
+    backgroundColor: "rgba(0,0,0,0.1)",
+  },
+  seeAllCardGradient: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 8,
+    borderRadius: 16,
+    paddingHorizontal: 24,
+    paddingVertical: 20,
+    position: "relative",
+  },
+  seeAllCardText: {
+    color: "rgba(255,255,255,0.95)",
+    fontSize: 20,
+    fontFamily: "Urbanist_700Bold",
+    textAlign: "center",
+  },
+  seeAllSubtext: {
+    color: "rgba(255,255,255,0.6)",
     fontSize: 14,
-    fontFamily: "Urbanist_600SemiBold",
-    letterSpacing: -0.2,
+    marginTop: -6,
+    fontFamily: "Urbanist_500Medium",
+  },
+  seeAllSubtextFocused: {
+    color: "rgba(0,0,0,1)",
+  },
+  seeAllIconContainer: {
+    position: "absolute",
+    top: 12,
+    right: 12,
+  },
+  seeAllIconGradient: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    justifyContent: "center",
+    alignItems: "center",
   },
   listContainer: {
     paddingHorizontal: 42,
